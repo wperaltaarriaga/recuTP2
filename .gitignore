@@ -1,0 +1,9 @@
+# Ignorar dependencias
+node_modules/
+
+# Ignorar archivos del sistema
+.DS_Store
+
+# Ignorar configuraciones locales
+.vscode/
+.env
