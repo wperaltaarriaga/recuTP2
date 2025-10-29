@@ -28,7 +28,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkb
 PUT http://127.0.0.1:3001/cards/1234567890123456
 
 {
-  "cardHolder": "Jane Doe"
+  "cardHolder": "Ana Peralta"
 }
 
 ### Eliminar tarjeta

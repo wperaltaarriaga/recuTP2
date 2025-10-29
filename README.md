@@ -1,38 +1,42 @@
-# Recuperatorio - API de Gestión de Tarjetas
+# Recuperatorio - Gestión de Tarjetas
 
-Este proyecto es una API para la gestión de tarjetas, que incluye funcionalidades para obtener, crear, actualizar y eliminar tarjetas.
- La API está construida con Node.js y Express.
+Este proyecto es una API REST desarrollada en Node.js que permite gestionar tarjetas de crédito. Incluye autenticación mediante tokens JWT para proteger las rutas y garantizar que solo usuarios autorizados puedan acceder a las funcionalidades.
 
 # Endpoints
 Obtener tarjetas por email
 Método: GET
 URL: /cards/:email
-Autenticación: Requiere encabezado Authorization con credenciales en formato Basic.
-GET http://127.0.0.1:3001/cards/john.doe@example.com
-Authorization: Basic YWRtaW46YWRtaW4xMjM0
+GET http://127.0.0.1:3001/cards/wperalta@gmail.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNzgwMzY4LCJleHAiOjE3NjE4NjY3Njh9.T0sxUY30MOn3GIpcboExNr0coDlMX21J16kmegq-c-I
 
 Crear una tarjeta
-Método: POST
-URL: /cards
-Cuerpo:
- {
-  "cardNumber": "1234567890123456",
-  "email": "test@example.com",
-  "name": "Test Card"
-}
+POST http://127.0.0.1:3001/cards
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNzgwMzY4LCJleHAiOjE3NjE4NjY3Njh9.T0sxUY30MOn3GIpcboExNr0coDlMX21J16kmegq-c-I
+
+    {
+      "cardNumber": "1234567890123456",
+      "cardHolder": "Wanda Peralta",
+      "expirationDate": "12/25",
+      "cvv": "123",
+      "email": "wperalta@gmail.com"
+    }
 
 Actualizar una tarjeta
 Método: PUT
 URL: /cards/:cardNumber
+PUT http://127.0.0.1:3001/cards/1234567890123456
+
 {
-  "name": "Updated Card Name"
+  "cardHolder": "Ana Peralta"
 }
 
 Eliminar una tarjeta
 Método: DELETE
 URL: /cards/:cardNumber
-Middleware de Autenticación
-El middleware authMiddleware verifica el encabezado Authorization y valida las credenciales. Las credenciales por defecto son:
+DELETE http://127.0.0.1:3001/cards/1234567890123456
+
+Middleware de autenticación
+El middleware authMiddleware verifica el encabezado Authorization y valida el token JWT. Si el token es válido, permite el acceso a las rutas protegidas. En caso contrario, devuelve un error 401.
 
 Usuario: admin
 Contraseña: admin1234
