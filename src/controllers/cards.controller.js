@@ -1,45 +1,81 @@
-// Controlador para manejar las operaciones CRUD de tarjetas
-import { readJSON, writeJSON } from "../storage/jsonStorage.js";
+import { JSONRepository } from "../repositories/json.repositorie.js";
 
-const filePath = "./data/cards.json"; // Ruta al archivo JSON
+const repository = new JSONRepository("./src/data/cards.json");
 
 // Obtener tarjetas por email
 export const getCardsByEmail = async (req, res) => {
-  const { email } = req.params; // Obtiene el email de los parámetros
-  const cards = await readJSON(filePath); // Lee las tarjetas del archivo JSON
-  const userCards = cards.filter((card) => card.email === email); // Filtra por email
-  res.json(userCards); // Devuelve las tarjetas del usuario
+  try {
+    const { email } = req.params;
+    const cards = await repository.getAllData();
+    const userCards = cards.filter((card) => card.email === email);
+
+    res.json({
+      OK: true,
+      message: `Tarjetas asociadas al email ${email}`,
+      payload: userCards,
+    });
+  } catch (error) {
+    res.status(500).json({
+      OK: false,
+      message: "Error al obtener las tarjetas",
+      error: error.message,
+    });
+  }
 };
 
 // Crear una nueva tarjeta
 export const createCard = async (req, res) => {
-  const newCard = req.body; // Obtiene los datos de la tarjeta del cuerpo de la solicitud
-  const cards = await readJSON(filePath); // Lee las tarjetas existentes
-  cards.push(newCard); // Agrega la nueva tarjeta
-  await writeJSON(filePath, cards); // Guarda los cambios en el archivo JSON
-  res.status(201).json(newCard); // Devuelve la tarjeta creada
+  try {
+    const newCard = req.body;
+    const createdCard = await repository.create(newCard);
+
+    res.status(201).json({
+      OK: true,
+      message: "Tarjeta creada exitosamente",
+      payload: createdCard,
+    });
+  } catch (error) {
+    res.status(500).json({
+      OK: false,
+      message: "Error al crear la tarjeta",
+      error: error.message,
+    });
+  }
 };
 
 // Actualizar una tarjeta existente
 export const updateCard = async (req, res) => {
-  const { cardNumber } = req.params; // Obtiene el número de tarjeta de los parámetros
-  const updatedCard = req.body; // Obtiene los datos actualizados del cuerpo de la solicitud
-  const cards = await readJSON(filePath); // Lee las tarjetas existentes
-  const index = cards.findIndex((card) => card.cardNumber === cardNumber); // Busca la tarjeta
-  if (index === -1) return res.status(404).json({ message: "Card not found" }); // Si no existe, devuelve un error
-  cards[index] = { ...cards[index], ...updatedCard }; // Actualiza los datos de la tarjeta
-  await writeJSON(filePath, cards); // Guarda los cambios en el archivo JSON
-  res.json(cards[index]); // Devuelve la tarjeta actualizada
+  try {
+    const { cardNumber } = req.params;
+    const updatedCard = { ...req.body, cardNumber };
+    const card = await repository.update(updatedCard);
+
+    res.json({
+      OK: true,
+      message: "Tarjeta actualizada exitosamente",
+      payload: card,
+    });
+  } catch (error) {
+    res.status(500).json({
+      OK: false,
+      message: "Error al actualizar la tarjeta",
+      error: error.message,
+    });
+  }
 };
 
 // Eliminar una tarjeta
 export const deleteCard = async (req, res) => {
-  const { cardNumber } = req.params; // Obtiene el número de tarjeta de los parámetros
-  const cards = await readJSON(filePath); // Lee las tarjetas existentes
-  const filteredCards = cards.filter((card) => card.cardNumber !== cardNumber); // Filtra las tarjetas
-  await writeJSON(filePath, filteredCards); // Guarda los cambios en el archivo JSON
-  res.status(204).send(); // Devuelve una respuesta sin contenido
-};
+  try {
+    const { cardNumber } = req.params;
+    await repository.delete(cardNumber);
 
-
-
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({
+      OK: false,
+      message: "Error al eliminar la tarjeta",
+      error: error.message,
+    });
+  }
+}

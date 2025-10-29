@@ -1,0 +1,35 @@
+### Generar token
+POST http://127.0.0.1:3001/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin1234"
+}
+
+
+### Crear tarjeta
+POST http://127.0.0.1:3001/cards
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNzgwMzY4LCJleHAiOjE3NjE4NjY3Njh9.T0sxUY30MOn3GIpcboExNr0coDlMX21J16kmegq-c-I
+
+    {
+      "cardNumber": "1234567890123456",
+      "cardHolder": "Wanda Peralta",
+      "expirationDate": "12/25",
+      "cvv": "123",
+      "email": "wperalta@gmail.com"
+    }
+
+### Obtener tarjetas por email
+GET http://127.0.0.1:3001/cards/wperalta@gmail.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNzgwMzY4LCJleHAiOjE3NjE4NjY3Njh9.T0sxUY30MOn3GIpcboExNr0coDlMX21J16kmegq-c-I
+
+### Actualizar tarjeta
+PUT http://127.0.0.1:3001/cards/1234567890123456
+
+{
+  "cardHolder": "Jane Doe"
+}
+
+### Eliminar tarjeta
+DELETE http://127.0.0.1:3001/cards/1234567890123456

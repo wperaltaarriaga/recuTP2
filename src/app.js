@@ -1,15 +1,8 @@
-//import server from "./server.js";
-//import cardRoutes from "./routes/cards.routes.js";
-import express from "express";
-import server from "./server.js";
-import cardRoutes from "./routes/cards.routes.js";
+import server from "./server.js"; // Importar el servidor desde server.js
 
 const PORT = 3001;
 const HOST = "127.0.0.1";
 
-server.use(express.json());
-server.use("/cards", cardRoutes);
-
 server.listen(PORT, () => {
-  console.log(`Server funcionando en http://${HOST}:${PORT}`);
+  console.log(`Escuchando en http://${HOST}:${PORT}`);
 });

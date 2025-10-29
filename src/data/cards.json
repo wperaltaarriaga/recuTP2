@@ -1,0 +1,23 @@
+[
+    {
+      "cardNumber": "1234567890123456",
+      "cardHolder": "Wanda Peralta",
+      "expirationDate": "12/25",
+      "cvv": "123",
+      "email": "wperalta@gmail.com"
+    },
+    {
+      "cardNumber": "9876543210987654",
+      "cardHolder": "Laura Arriaga",
+      "expirationDate": "11/24",
+      "cvv": "456",
+      "email": "laura.arriaga@gmail.com"
+    },
+    {
+      "cardNumber": "1111222233334444",
+      "cardHolder": "Richard Johnson",
+      "expirationDate": "10/23",
+      "cvv": "789",
+      "email": "rich.johnson@example.com"
+    }
+  ]

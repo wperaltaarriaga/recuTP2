@@ -1,19 +1,33 @@
 
+import jwt from "jsonwebtoken";
+import { CONFIG } from "../config/config.js"; 
+
 export const authMiddleware = (req, res, next) => {
-  console.log("Authorization Header:", req.headers.authorization);
-  
+  // Leer el token del encabezado Authorization
   const authHeader = req.headers.authorization;
+
   if (!authHeader) {
-    return res.status(401).json({ message: "El servidor no esta recibiendo el encabezado" });
+    return res.status(401).json({
+      OK: false,
+      message: "No se proporcionó un token de autorización",
+    });
   }
 
-  const [username, password] = Buffer.from(authHeader.split(" ")[1], "base64")
-    .toString()
-    .split(":");
+  // bearer + token
+  const token = authHeader.split(" ")[1];
 
-  if (username === "admin" && password === "admin1234") {
-    return next();
+  try {
+  
+    const decoded = jwt.verify(token, CONFIG.SECRET_KEY);
+
+    // Agregar la información del usuario al objeto req
+    req.user = decoded;
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      OK: false,
+      message: "Token inválido o expirado",
+    });
   }
-
-  return res.status(401).json({ message: "credenciales invalidas" });
-};
+}
